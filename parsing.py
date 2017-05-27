@@ -21,6 +21,7 @@ def __read_tags_and_check():
         except ValueError:
             choice_tags.append(r)  # Кидаем элемент в конец списка
         i += 1
+    print(choice_tags)
     file.close()  # Закрываем файл
     return choice_tags
 
@@ -41,14 +42,14 @@ def __connect(list_tags):
 # Парсим полученную страницу и отсылаем url с страницы картинки
 def __parse_and_get_image_url(html_doc):
     # Выбираем рандомное id
-    soup = BeautifulSoup(html_doc)
+    soup = BeautifulSoup(html_doc, "html.parser")
     div_content = soup.find('div', class_='content')  # Выбираем div.content
     if div_content.find('a') is None:
         time.sleep(3)
         load_img()
     else:
-        a = div_content.find_all('a')  # Ищем все теги a в div.content
-        url_id = a[random.randint(0, 39)]['id']  # Выбираем рандомный id
+        a = div_content.find_all('a', id=True)  # Ищем все теги <a> с id в div.content
+        url_id = random.choice(a)['id']  # Выбираем рандомный id
         url_id = url_id[1:]  # id без первой буквы
         url = "https://safebooru.org/index.php?page=post&s=view&id=" + url_id  # добавляем id в url для перехода к картинке
         return url
@@ -57,9 +58,9 @@ def __parse_and_get_image_url(html_doc):
 # Делаем прямой url картинки
 def __get_img_url(url):
     html_code = requests.get(url)  # переходим к картинке
-    soup = BeautifulSoup(html_code.text)  # забиваем в суп
+    soup = BeautifulSoup(html_code.text, "html.parser")  # забиваем в суп
     img_url = soup.find('img', id='image')['src']  # ищем
-    print('Url картинки: '+img_url)
+    print('Url картинки: ' + img_url)
     return img_url[2:]
 
 

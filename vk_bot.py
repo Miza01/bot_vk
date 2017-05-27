@@ -1,7 +1,5 @@
 import vk
-import json
 import requests
-import parsing
 from settings import Settings
 
 
@@ -22,8 +20,6 @@ def posting():
     photos = api.photos.saveWallPhoto(group_id=(Settings.owner_id * -1), photo=req_json["photo"],
                                       hash=req_json["hash"], server=req_json["server"])  # Сохраняем фотографию
     dict_photo = eval(str(photos)[1::][:-1:])
-    api.wall.post(owner_id=Settings.owner_id, message="Frog's bot",
+    api.wall.post(owner_id=Settings.owner_id, message="",
                   attachment=dict_photo['id'])
 
-
-posting()
