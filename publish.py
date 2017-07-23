@@ -10,7 +10,7 @@ def log_in():
     return api
 
 
-def posting():
+def publish():
     api = log_in()  # Логиним API
     upload_url = api.photos.getWallUploadServer(
         group_id=(Settings.owner_id * -1))  # Получаем ссылку для отправки POST запроса

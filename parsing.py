@@ -47,6 +47,7 @@ def __check_blacklist(tags):
             return False
     return True
 
+
 # Парсим полученную страницу и отсылаем url с страницы картинки
 def __parse_and_get_image_url(xml):
     root = etree.fromstring(xml.encode())
@@ -60,10 +61,14 @@ def __parse_and_get_image_url(xml):
 
 
 def load_img():
-    tags = __read_tags_and_check()
-    html = __connect(tags)
-    img_url = __parse_and_get_image_url(html)
-    img = urllib.request.urlopen("https://" + img_url).read()
-    out = open("img/img.jpg", "wb")
-    out.write(img)
-    out.close()
+    try:
+        tags = __read_tags_and_check()
+        html = __connect(tags)
+        img_url = __parse_and_get_image_url(html)
+        img = urllib.request.urlopen("https://" + img_url).read()
+        out = open("img/img.jpg", "wb")
+        out.write(img)
+        out.close()
+    except Exception as err:
+        print(err)
+        load_img()

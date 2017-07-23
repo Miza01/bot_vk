@@ -1,5 +1,5 @@
 import parsing
-import vk_bot
+import publish
 
 parsing.load_img()
-vk_bot.posting()
+publish.publish()
