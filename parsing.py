@@ -1,4 +1,3 @@
-import urllib
 import requests
 import random
 import time
@@ -15,10 +14,10 @@ def __scrap_tag_source(idPost):
         soup = BeautifulSoup(html, 'html.parser')
         tag = soup.find("li", "tag-type-copyright").a.contents[0]
         tag_parse = "#" + tag.strip().replace(" ", "_").replace("/", " #")
-        tagcache_file = open("tagcache", "w")
+        tagcache_file = open("tagcache.txt", "w")
         tagcache_file.write(tag_parse)
     except:
-        tagcache_file = open("tagcache", "w")
+        tagcache_file = open("tagcache.txt", "w")
         tagcache_file.write("#No_tag")
 
 

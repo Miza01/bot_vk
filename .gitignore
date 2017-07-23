@@ -1,4 +1,4 @@
 .idea/
-__pycache__
-settings_app
+settings_app/
+Будет удалено __pycache__/
 Будет удалено test.py

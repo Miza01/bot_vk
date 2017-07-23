@@ -4,7 +4,7 @@ from settings import Settings
 
 
 def get_source_tag():
-    return open("tagcache", "r").read()
+    return open("tagcache.txt", "r").read()
 
 
 def log_in():
