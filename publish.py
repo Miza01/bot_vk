@@ -3,6 +3,10 @@ import requests
 from settings import Settings
 
 
+def get_source_tag():
+    return open("tagcache", "r").read()
+
+
 def log_in():
     session = vk.AuthSession(app_id=Settings.app_id, user_login=Settings.login, user_password=Settings.password,
                              scope='wall, photos')
@@ -20,6 +24,6 @@ def publish():
     photos = api.photos.saveWallPhoto(group_id=(Settings.owner_id * -1), photo=req_json["photo"],
                                       hash=req_json["hash"], server=req_json["server"])  # Сохраняем фотографию
     dict_photo = eval(str(photos)[1::][:-1:])
-    api.wall.post(owner_id=Settings.owner_id, message="",
+    api.wall.post(owner_id=Settings.owner_id, message=get_source_tag(),
                   attachment=dict_photo['id'])
 

@@ -4,6 +4,22 @@ import random
 import time
 import json
 from lxml import etree
+from urllib import request
+from bs4 import BeautifulSoup
+
+
+def __scrap_tag_source(idPost):
+    try:
+        url = "http://safebooru.org/index.php?page=post&s=view&id=" + str(idPost)
+        html = request.urlopen(url).read()
+        soup = BeautifulSoup(html, 'html.parser')
+        tag = soup.find("li", "tag-type-copyright").a.contents[0]
+        tag_parse = "#" + tag.strip().replace(" ", "_").replace("/", " #")
+        tagcache_file = open("tagcache", "w")
+        tagcache_file.write(tag_parse)
+    except:
+        tagcache_file = open("tagcache", "w")
+        tagcache_file.write("#No_tag")
 
 
 # Читает теги из файла tags.txt и выбирает рандомно от 1 до 3. Отдаёт лист с тегами.
@@ -26,7 +42,7 @@ def __read_tags_and_check():
     return choice_tags
 
 
-# Конект и считывание html. Принимает лист из тэгов. Отдает текст html.
+# Конект и считывание xml.
 def __connect(list_tags):
     url = 'https://safebooru.org/index.php?page=dapi&s=post&q=index&tags='  # Главный url
     for tag in list_tags:
@@ -39,6 +55,7 @@ def __connect(list_tags):
     return xml.text
 
 
+# Проверка нахождения тега в blacklist
 def __check_blacklist(tags):
     file = json.load(open('settings_app/tags.json', "r"))
     blacklist = file["blacklist"]
@@ -54,6 +71,7 @@ def __parse_and_get_image_url(xml):
     if len(root) > 0:
         r = random.randint(0, len(root))
         post = root[r]
+        __scrap_tag_source(post.attrib["id"])  # Ищем тег соуса
         if __check_blacklist(post.attrib["tags"]):
             return post.attrib["file_url"][2:]
     time.sleep(3)
@@ -65,7 +83,7 @@ def load_img():
         tags = __read_tags_and_check()
         html = __connect(tags)
         img_url = __parse_and_get_image_url(html)
-        img = urllib.request.urlopen("https://" + img_url).read()
+        img = request.urlopen("https://" + img_url).read()
         out = open("img/img.jpg", "wb")
         out.write(img)
         out.close()
