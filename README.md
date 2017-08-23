@@ -14,3 +14,4 @@ python-utils==2.1.0
 requests==2.13.0
 six==1.10.0
 vk==2.0.2
+requests-futures==0.9.7
